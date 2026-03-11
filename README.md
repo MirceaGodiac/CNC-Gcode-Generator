@@ -10,8 +10,8 @@ This repository contains the software and firmware pipeline for a custom-built, 
 
 The project is split into two distinct environments to handle the computational load and real-time hardware constraints:
 
-1. **The Python/OpenCV Pipeline (Host):** Maps image pixel brightness into a 50,000-point matrix. [cite_start]It generates a 194x258 grid representing 11 discrete intervals (0-10) of "squiggle" intensity, outputting a highly optimized G-code command chain[cite: 15, 16].
-2. [cite_start]**The C++ Arduino Firmware (Client):** A custom G-code parser running on an Arduino Uno that handles the complex trigonometry of motor micro-stepping[cite: 17]. 
+1. **The Python/OpenCV Pipeline (Host):** Maps image pixel brightness into a 50,000-point matrix. It generates a 194x258 grid representing 11 discrete intervals (0-10) of "squiggle" intensity, outputting a highly optimized G-code command chain.
+2. **The C++ Arduino Firmware (Client):** A custom G-code parser running on an Arduino Uno that handles the complex trigonometry of motor micro-stepping. 
 
 ## Solving the Hardware Bottleneck: The 1KB Buffer
 
@@ -20,10 +20,10 @@ The project is split into two distinct environments to handle the computational 
 
 Passing 50,000 continuous shading commands directly over Serial or standard SPI reads causes severe motor jitter due to the Arduino's limited SRAM and variable SD card read speeds. 
 
-[cite_start]To solve this, the C++ firmware implements a **1KB circular instruction buffer**[cite: 18]. 
+To solve this, the C++ firmware implements a **1KB circular instruction buffer**. 
 * The Python script compiles the high-level toolpath into compact `G1 X[pos] Y[pos] S[intensity]` commands.
 * The SD card asynchronously fills the buffer while the Arduino executes the micro-steps.
-* [cite_start]**Result:** Zero motor stalling and highly accurate image reproduction without dropping steps[cite: 18].
+* **Result:** Zero motor stalling and highly accurate image reproduction without dropping steps.
 
 ## How to Run the Toolpath Generator
 
